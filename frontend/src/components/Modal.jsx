@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react';
-import { EventTile } from './EventTile'
 import axios from 'axios';
 
 const Modal = ({ isVisible, onClose, event, setEvent}) => {
     if (!isVisible) return null;
 
-    const submitForm = async (e) => {
-        e.preventDefault();
-        const form = e.target;
+    const submitForm = (e) => {
+      e.preventDefault();
+      
+      const form = e.target;
     
         const obj_temp = {
           name: form.eventname.value,
@@ -16,21 +15,24 @@ const Modal = ({ isVisible, onClose, event, setEvent}) => {
           date: form.date.value,
         };
     
-        try {
-          const response = await axios.post('http://localhost:3000/create_event', obj_temp, {
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-    
-          if (response.status === 200) {
-            setEvent([...event, <EventTile key={obj_temp.name} props={obj_temp} />]);
-            onClose();
+        axios.post('http://localhost:3000/create_event', obj_temp, {
+          headers: {
+            'Content-Type': 'application/json'
           }
-        } catch (err) {
+        }).then(response => {
+            const new_obj = {
+              _id : response.data._id,
+              name: form.eventname.value,
+              time: form.time.value,
+              venue: form.venue.value,
+              date: form.date.value,
+            }
+            setEvent([...event, new_obj])
+            onClose();
+          }).catch(err => {
           console.error('Error creating event:', err);
-        }
-      };
+        })
+    }
 
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

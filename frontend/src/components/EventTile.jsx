@@ -2,26 +2,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
-export const EventTile = ({object_id, props, events, setEvents}) => {
-
-    const deleteElement = async () => {
+export const EventTile = ({ object_id, props, events, setEvents, Auth }) => {
+    const deleteElement = () => {
         const object_del = {
             id: object_id
         }
-        try {
-            const response = await axios.delete('http://localhost:3000/delete', {
-                data: object_del,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (response.status === 200) {
-                setEvents(events.filter(event => event.id !== object_id));
+        const response = axios.delete('http://localhost:3000/delete', {
+            data: object_del,
+            headers: {
+                'Content-Type': 'application/json'
             }
-        } catch(err){
+        }).then(response => {
+            if (response.status === 200) {
+                const filtered = events.filter(events => object_id !== events._id);
+                setEvents(filtered);
+            }
+        }).catch(err => {
             console.error('Error deleting event:', err);
-        }
-        console.log("Deleted")
+        })
     };
     return (
         <>
@@ -41,9 +39,9 @@ export const EventTile = ({object_id, props, events, setEvents}) => {
                         {props.date}
                     </div>
                 </div>
-                <button className='absolute bottom-0 right-0 m-2' onClick={deleteElement}>
-                        <FontAwesomeIcon icon={faTrash} />
-                </button>
+                {Auth && <button className='absolute bottom-0 right-0 m-2' onClick={deleteElement}>
+                    <FontAwesomeIcon icon={faTrash} />
+                </button>}
             </div>
         </>
     )

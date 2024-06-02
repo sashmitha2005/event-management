@@ -42,7 +42,7 @@ app.post('/create_event', async (req, res) => {
         const data = req.body;
         const newEvent = new Event(data);
         await newEvent.save();
-        res.json({ message: 'Event created successfully', event: newEvent });
+        res.json({message: 'Event created successfully', _id : newEvent._id });
     } catch (err) {
         console.error('Error creating event:', err);
         res.status(400).send('Error creating event');
@@ -53,7 +53,6 @@ app.delete('/delete', async(req, res) => {
     try{
         const data = req.body;
         const result = await Event.findByIdAndDelete(data.id);
-        console.log(req.body);
         res.end("Success");
     } catch(err){
         console.error('Error deleting event:', err);
