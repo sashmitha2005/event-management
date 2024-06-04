@@ -22,6 +22,7 @@ const EventSchema = new mongoose.Schema({
     time: String,
     venue: String,
     date: String,
+    content : String
 });
 
 

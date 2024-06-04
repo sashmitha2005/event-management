@@ -13,6 +13,7 @@ const Modal = ({ isVisible, onClose, event, setEvent}) => {
           time: form.time.value,
           venue: form.venue.value,
           date: form.date.value,
+          content : form.content.value
         };
     
         axios.post('http://localhost:3000/create_event', obj_temp, {
@@ -26,6 +27,7 @@ const Modal = ({ isVisible, onClose, event, setEvent}) => {
               time: form.time.value,
               venue: form.venue.value,
               date: form.date.value,
+              content : form.content.value
             }
             setEvent([...event, new_obj])
             onClose();
@@ -43,6 +45,7 @@ const Modal = ({ isVisible, onClose, event, setEvent}) => {
             <input id='time' type='text' placeholder='Enter Time' className='border-2 rounded-lg m-2 p-2' />
             <input id='venue' type='text' placeholder='Enter Venue' className='border-2 rounded-lg m-2 p-2' />
             <input id='date' type="date" placeholder='Enter Date' className="border-2 w-[30%] rounded-lg m-2 p-1" />
+            <textarea id='content' type='text' placeholder='Enter Content' className='border-2 m-2 p-2'/> 
             <button type='submit' className=' w-[30%] m-2 p-2 rounded-lg bg-blue-700 hover:bg-blue-800'>Submit</button>
           </form>
         </div>

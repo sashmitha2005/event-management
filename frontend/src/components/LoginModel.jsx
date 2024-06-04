@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 const LoginModal = ({isVisible, onClose, setAuth}) =>{
 
     if (!isVisible) return null;

@@ -9,6 +9,9 @@ export default {
       scale: {
         '102': '1.02',
       },
+      color:{
+        myblue : '#0F172A'
+      },
     },
   },
   plugins: [],
