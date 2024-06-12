@@ -1,12 +1,12 @@
-const mongoose = require('mongoose')
-const express = require('express')
+const mongoose = require('mongoose');
+const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors')
-const app = express()
+const cors = require('cors');
+const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
 const connectionString = 'mongodb://127.0.0.1:27017/event-management';
 
@@ -22,9 +22,8 @@ const EventSchema = new mongoose.Schema({
     time: String,
     venue: String,
     date: String,
-    content : String
+    content: String
 });
-
 
 const Event = mongoose.model('event-list', EventSchema);
 
@@ -43,23 +42,37 @@ app.post('/create_event', async (req, res) => {
         const data = req.body;
         const newEvent = new Event(data);
         await newEvent.save();
-        res.json({message: 'Event created successfully', _id : newEvent._id });
+        res.json({ message: 'Event created successfully', _id: newEvent._id });
     } catch (err) {
         console.error('Error creating event:', err);
         res.status(400).send('Error creating event');
     }
 });
 
-app.delete('/delete', async(req, res) => {
-    try{
+app.delete('/delete', async (req, res) => {
+    try {
         const data = req.body;
         const result = await Event.findByIdAndDelete(data.id);
         res.end("Success");
-    } catch(err){
+    } catch (err) {
         console.error('Error deleting event:', err);
         res.status(400).send("error");
     }
 });
+
+// Route for updating an event
+app.put('/update_event/:id', async (req, res) => {
+    try {
+        const eventId = req.params.id;
+        const updatedEventData = req.body;
+        const updatedEvent = await Event.findByIdAndUpdate(eventId, updatedEventData, { new: true });
+        res.json(updatedEvent);
+    } catch (err) {
+        console.error('Error updating event:', err);
+        res.status(400).send('Error updating event');
+    }
+});
+
 
 const port = 3000;
 app.listen(port, () => console.log(`Server listening on port ${port}`));
